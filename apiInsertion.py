@@ -36,5 +36,65 @@ def create_database_and_insert_data():
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 
+@app.route('/read',methods=['GET'])
+def read_database():
+        try:
+            empId=request.args.get("empID")
+            # if not empId:
+            #       return jsonify({"error":"empId can't be empty"})
+            db=client[db_name]
+            collecion=db[collection_name]
+            if empId:
+                result=collecion.find_one({"empID": int(empId)})
+                if result:
+                        result["_id"] = str(result["_id"])  # Convert ObjectId to string for JSON serialization
+                        return jsonify({"message": "Record fetched Successfully","result":result}), 200
+                # return jsonify({"message": "Record fetched Successfully"}), 200
+                else:
+                    return jsonify({"error": "Record Not Found"}),404
+            else:
+                result=list(collecion.find())
+                for record in result:
+                    record["_id"] = str(record["_id"])  # Convert ObjectId to string for JSON serialization
+                return jsonify({"message": "Record fetched Successfully","result":result}), 200
+
+        except Exception as e:
+            return jsonify({"error":str(e)}),500 
+
+@app.route('/update',methods=['PUT'])
+def update_database():
+    try:
+        data=request.json
+        empId=data.get("empID")
+        updatedData=data.get("updated_data")
+        if not empId or not updatedData:
+            return jsonify({"error": "empId and updatedData are required"}), 400
+        db=client[db_name]
+        collection=db[collection_name]
+        result=collection.update_one({"empID": int(empId)},{"$set": updatedData})
+        if result.matched_count>0:
+            return jsonify({"message": "Record Updated Successfully"}), 200
+        else:
+            return jsonify({"message": "Record not found"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/delete', methods=['DELETE'])
+def delete_database():
+        try:
+            empId=request.args.get("empID")
+            if not empId:
+                  return jsonify({"error":"empId can't be empty"})
+            db=client[db_name]
+            collecion=db[collection_name]
+            result=collecion.delete_one({"empID": int(empId)})
+            if result.deleted_count>0:
+                  return jsonify({"message": "Record Deleted Successfully"}), 200
+            else:
+                return jsonify({"error": "Record Not Found"}),404
+        except Exception as e:
+            return jsonify({"error":str(e)}),500 
+
+
 if __name__ == '__main__':
     app.run(debug=True)
