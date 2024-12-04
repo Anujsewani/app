@@ -32,11 +32,12 @@ document.querySelector("form").addEventListener("submit", async function (event)
             location.reload()
         } else {
             alert("Error submitting data!");
-            // location.reload()
+            location.reload()
         }
     } catch (error) {
         console.error("Error:", error);
         alert("An error occurred!");
+        location.reload()
         
     }
 });
