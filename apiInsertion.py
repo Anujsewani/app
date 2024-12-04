@@ -30,22 +30,34 @@ initialize_emp_id()
 @app.route('/insert', methods=['POST'])
 def create_database_and_insert_data():
         global current_emp_id
-        try:
-                data=request.json
-                empData=data.get("emp_data")
-                if not db_name or not collection_name or not empData:
-                    return jsonify({"error": "Database, collection, and empData are required"}), 400
+        
+        try:    
                 db=client[db_name]
                 collection=db[collection_name]
-                collection.create_index("empID",unique=True)
-                for Data in empData:
-                    try:
-                        Data["empID"] = current_emp_id  # Assign the next available empID
-                        current_emp_id += 1 
-                        collection.insert_one(Data)
-                    except DuplicateKeyError as e:
-                        return jsonify({"error": "Duplicate data, try again"}), 400
-                return jsonify({"message": f"Inserted {len(empData)} records successfully"}), 201
+                data=request.json
+                empData=data.get('emp_data', [])[0]
+                if not db_name or not collection_name or not empData:
+                    return jsonify({"error": "Database, collection, and empData are required"}), 400
+                
+                if empData:
+                    username = empData.get('username')
+
+        # Check for duplicates
+                    existing_employee = collection.find_one({'username': username})
+                    if existing_employee:
+                        return jsonify({"error": "Employee with this username already exists"}), 400
+
+                    # db=client[db_name]
+                    # collection=db[collection_name]
+                    collection.create_index("empID",unique=True)
+                 
+                    empData["empID"] = current_emp_id  # Assign the next available empID
+                    current_emp_id += 1 
+                    collection.insert_one(empData)
+                    return jsonify({"message": f"Inserted {len(empData)} records successfully"}), 201
+        except DuplicateKeyError as e:
+            return jsonify({"error": "Duplicate data, try again"}), 400
+                        
 
         except Exception as e:
             return jsonify({"error": str(e)}), 500
