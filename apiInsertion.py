@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
 from pymongo import MongoClient,errors
+from flask_cors import CORS
 from pymongo.errors import DuplicateKeyError
 
 app=Flask(__name__)
+CORS(app)
 db_name="employee"
 collection_name="information"
 
@@ -16,8 +18,18 @@ def connect_to_mongodb():
                 exit(1)
 client=connect_to_mongodb()
 
+# Function to initialize empID at startup
+def initialize_emp_id():
+    global current_emp_id
+    db=client[db_name]
+    collection=db[collection_name]
+    last_document = collection.find_one(sort=[("empID", -1)])  # Get the highest empID
+    current_emp_id = last_document["empID"] + 1 if last_document else 1  # Start from 1 if no records
+
+initialize_emp_id()
 @app.route('/insert', methods=['POST'])
 def create_database_and_insert_data():
+        global current_emp_id
         try:
                 data=request.json
                 empData=data.get("emp_data")
@@ -28,6 +40,8 @@ def create_database_and_insert_data():
                 collection.create_index("empID",unique=True)
                 for Data in empData:
                     try:
+                        Data["empID"] = current_emp_id  # Assign the next available empID
+                        current_emp_id += 1 
                         collection.insert_one(Data)
                     except DuplicateKeyError as e:
                         return jsonify({"error": "Duplicate data, try again"}), 400
@@ -40,8 +54,6 @@ def create_database_and_insert_data():
 def read_database():
         try:
             empId=request.args.get("empID")
-            # if not empId:
-            #       return jsonify({"error":"empId can't be empty"})
             db=client[db_name]
             collecion=db[collection_name]
             if empId:
@@ -49,7 +61,6 @@ def read_database():
                 if result:
                         result["_id"] = str(result["_id"])  # Convert ObjectId to string for JSON serialization
                         return jsonify({"message": "Record fetched Successfully","result":result}), 200
-                # return jsonify({"message": "Record fetched Successfully"}), 200
                 else:
                     return jsonify({"error": "Record Not Found"}),404
             else:
