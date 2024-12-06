@@ -7,9 +7,11 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <div class="outer-container">
+      <div class="main-heading"><h1>CRUD APP</h1></div>
+      <div class="outer-container">  
         <div class="section read-section">
             <h2>Fetch Details</h2>
+            Note: This will Fetch the data from database.
             <form id="readForm">
                 <label for="empID">Employee ID</label>
                 <input type="text" id="empID" placeholder="Please Enter Employee ID">
@@ -23,6 +25,7 @@
         <div class="section write-section">
             <div class="heading">
                 <h2>Enter Details</h2>
+                Note: This will Enter the data into database.
             </div>
             <form id="insertForm">
                             <!-- <form action="#" method="POST"> -->
@@ -48,6 +51,7 @@
         
         <div class="section update-section">
             <h2>Update Details</h2>
+            Note: This will Update the data into database.
             <form id="updateForm">
                 <label for="updateEmpID">Update Employee ID</label>
                 <input type="text" id="updateEmpID" placeholder="Please Enter Employee ID">
@@ -67,6 +71,7 @@
                 </div>
                 <div class="button">
                     <button type="submit">Update Data</button>
+                </div>
 
             </form>
 
@@ -74,6 +79,7 @@
         
         <div class="section delete-section">
             <h2>Delete Details</h2>
+            Note: This will Delete the data from database.
             <form id="deleteForm">
                 <label for="deleteEmpID">Delete Employee ID</label>
                 <input type="text" id="deleteEmpID" placeholder="Please Enter Employee ID">
