@@ -1,8 +1,24 @@
-document.querySelector("form").addEventListener("submit", async function (event) {
-    event.preventDefault();
+document.addEventListener("DOMContentLoaded", function () {
+    // Attach the event listener to the form
+    const insertForm = document.getElementById("insertForm");
 
-    const username = document.getElementById("username").value;
-    const designation = document.getElementById("designation").value;
+    if (!insertForm) {
+        console.error("Insert form not found");
+        return;
+    }
+
+    insertForm.addEventListener("submit", async function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Get form data
+        const username = document.getElementById("username").value.trim();
+        const designation = document.getElementById("designation").value;
+
+        if (!username || !designation) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
 
     const payload = {
         emp_data: [
@@ -40,4 +56,6 @@ document.querySelector("form").addEventListener("submit", async function (event)
         location.reload()
         
     }
+});
+
 });
