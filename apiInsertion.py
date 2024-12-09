@@ -10,8 +10,8 @@ collection_name="information"
 
 def connect_to_mongodb():
         try:
-                client= MongoClient("mongodb://localhost:27017/")
-                print("connected to mongodb successfullt")
+                client= MongoClient("mongodb://172.31.13.191:27017/")
+                print("connected to mongodb successfully")
                 return client
         except errors.ConnectionError as e:
                 print(f"Error connecting to mongodb: {e}")
@@ -120,4 +120,5 @@ def delete_database():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    #app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
