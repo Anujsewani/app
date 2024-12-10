@@ -4,6 +4,8 @@
 
 This is a CRUD APP which is used to perform create, read, update and delete operation in database
 
+**This app will run in ubuntu only**
+
 ## Pre-Requisites
 
 1. python3 installed(version:3.12.3)
@@ -27,7 +29,15 @@ python3 -m venv crudapp
 source crudapp/bin/activate
 pip install -r requirements.txt
 ```
-### 3. Install mongodb and Start it's service
+### 3. Setup Env file
+create a .env file in /app directory with following variables
+```bash
+MONGO_URL=mongodb://127.0.0.1:27017/ #(localhost and port number of mongodb)
+DB_NAME=employee #(database name)
+COLLECTION_NAME=information #(collection or table name)
+```
+
+### 4. Install mongodb and Start it's service
 
 ```bash
 sudo apt-get update
@@ -42,7 +52,7 @@ mongosh
 ```
 Now press ctrl+D to exit mongodb terminal
 
-### 4. Configure mongodb and Restart Service
+### 5. Configure mongodb and Restart Service
 
 ```bash
 sudo vi /etc/mongod.conf
@@ -53,7 +63,7 @@ net:
   bindIp: 127.0.0.1,172.31.13.191 #(private ip of your instance)
 sudo systemctl restart mongod  
 ```
-### 5. Changes in code
+### 6. Changes in code
 
 ```bash
 nano apiInsertion.py
@@ -63,7 +73,7 @@ nano apiInsertion.py
 #             client= MongoClient("mongodb://localhost:27017/")
 ```
 
-### 6. Install and Configre Nginx
+### 7. Install and Configre Nginx
 
 ```bash
 sudo apt install nginx
@@ -84,7 +94,7 @@ sudo vi /etc/nginx/sites-available/crudapp
 # index index.html;
 sudo systemctl restart nginx
 ```
-### 7. Run Application
+### 8. Run Application
 
 ```bash
 cd /home/ubuntu/app/ #( If you are in other directory then run this)

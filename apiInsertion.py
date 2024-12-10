@@ -3,14 +3,21 @@ from pymongo import MongoClient,errors
 from flask_cors import CORS
 from pymongo.errors import DuplicateKeyError
 
+from dotenv import load_dotenv
+import os
+
 app=Flask(__name__)
 CORS(app)
-db_name="employee"
-collection_name="information"
+load_dotenv()
+
+mongo_url=os.getenv("MONGO_URL")
+db_name=os.getenv("DB_NAME")
+collection_name=os.getenv("COLLECTION_NAME")
 
 def connect_to_mongodb():
         try:
-                client= MongoClient("mongodb://172.31.13.191:27017/")
+                # client= MongoClient("mongodb://172.31.13.191:27017/")
+                client= MongoClient(mongo_url)
                 print("connected to mongodb successfully")
                 return client
         except errors.ConnectionError as e:
