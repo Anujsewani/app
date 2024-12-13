@@ -1,7 +1,11 @@
+// import CONFIG from 'config.js';
+
+const API_BASE_URL = process.env.API_BASE_URL;
+
 document.addEventListener("DOMContentLoaded", function () {
     // Attach the event listener to the form
     const insertForm = document.getElementById("insertForm");
-
+    
     if (!insertForm) {
         console.error("Insert form not found");
         return;
@@ -34,7 +38,9 @@ document.addEventListener("DOMContentLoaded", function () {
    // console.log("Payload:", payload); // Debug payload
 
     try {
-        const response = await fetch("http://127.0.0.1:5000/insert",{
+        //const response = await fetch("http://127.0.0.1:5000/insert",{
+        //console.log(`${API_BASE_URL}insert`)
+        const response = await fetch("http://127.0.0.1:5000/insert", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

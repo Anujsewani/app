@@ -60,24 +60,21 @@ sudo vi /etc/mongod.conf
 # Add these lines in net block
 net:
   port: 27017
-  bindIp: 127.0.0.1,172.31.13.191 #(private ip of your instance)
+  bindIp: 127.0.0.1
 sudo systemctl restart mongod  
 ```
-### 6. Changes in code
+
+
+### 6. Install and Configre Nginx
 
 ```bash
-nano apiInsertion.py
-# In this function replace localhost with your private ip
-# def connect_to_mongodb():
-#         try:
-#             client= MongoClient("mongodb://localhost:27017/")
-```
-
-### 7. Install and Configre Nginx
-
-```bash
+sudo apt-get update
 sudo apt install nginx
-sudo cp -r frontend/ /var/www/html/
+
+sudo cp -r frontend/ /var/www/html/ #(This will copy the frontend folder to /var/www/html directory so if you don't want to copy you can use move as well)
+
+sudo mv frontend/ /var/www/html/ #(optional only run this command if you want to use move instead of copy the frontend directory to /var/www/html)
+
 sudo chown -R www-data:www-data /var/www/html/frontend/
 sudo chmod -R 755 /var/www/html/frontend/
 
@@ -85,19 +82,20 @@ sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/crudapp
 sudo rm -r /etc/nginx/sites-available/default 
 sudo rm -r /etc/nginx/sites-enabled/default 
 
+
 sudo vi /etc/nginx/sites-available/crudapp
+# update this line in servers update (root /var/www/html) to root /var/www/html/frontend/;
+# index index.html;
 sudo ln -s /etc/nginx/sites-available/crudapp /etc/nginx/sites-enabled
 sudo systemctl restart nginx
 
-sudo vi /etc/nginx/sites-available/crudapp
-# update this line root /var/www/html/frontend/;
-# index index.html;
-sudo systemctl restart nginx
+
+#sudo systemctl restart nginx
 ```
-### 8. Run Application
+NOTE: Make sure that port 80,5000 are open so if you are using AWS then in security group add inbound rules for these ports
+### 7. Run Application
 
 ```bash
-cd /home/ubuntu/app/ #( If you are in other directory then run this)
 python3 apiInsertion.py
 ```
 
