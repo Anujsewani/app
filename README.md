@@ -9,8 +9,9 @@ This is a CRUD APP which is used to perform create, read, update and delete oper
 ## Pre-Requisites
 
 1. python3 installed(version:3.12.3)
-2. nginx
-4. mongodb installed
+2. nginx(version: nginx/1.24.0 (Ubuntu))
+4. mongodb installed (version v7.0.15)
+
 
 ## How To Run
 
@@ -93,12 +94,16 @@ sudo systemctl restart nginx
 #sudo systemctl restart nginx
 ```
 NOTE: Make sure that port 80,5000 are open so if you are using AWS then in security group add inbound rules for these ports
+
+### Configure API Url
+
+Create a config.js file in /var/www/html/frontend/
+```sudo nano /var/www/html/frontend/config.js
+const apiUrl = "";
+```
+NOTE: Change ip in config.js file if using localhost enter "http://127.0.0.1:5000/"; or if you are using AWS or any other cloud then enter public ip of instance in place of localhost
 ### 7. Run Application
 
 ```bash
 python3 apiInsertion.py
 ```
-
-
-
-
