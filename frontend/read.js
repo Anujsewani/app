@@ -2,7 +2,7 @@ document.getElementById("readForm").addEventListener("submit", async function (e
     event.preventDefault();
     if (event.target.id !== "readForm") return; 
     const empId = document.getElementById("empID").value;
-    let url = `http://127.0.0.1:5000/read?empID=${empId}`;
+    let url = `${apiUrl}read?empID=${empId}`;
 
     try {
         const response = await fetch(url);
