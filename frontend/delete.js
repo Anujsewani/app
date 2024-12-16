@@ -2,7 +2,7 @@ document.getElementById("deleteForm").addEventListener("submit", async function 
     event.preventDefault();
     if (event.target.id !== "deleteForm") return; 
     const empId = document.getElementById("deleteEmpID").value;
-    let url = `http://127.0.0.1:5000/delete?empID=${empId}`;
+    let url = `${apiUrl}delete?empID=${empId}`;
 
     try {
         const response = await fetch(url,{method: "DELETE"});
